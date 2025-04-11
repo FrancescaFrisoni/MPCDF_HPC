@@ -37,7 +37,7 @@ module load apptainer/1.2.2
 apptainer exec geospatial_latest.sif R
 ```
 
-5. To install extra libraries In R it is necessay to create a writeable sandbox from the container 
+5. To install extra libraries In R it is necessary to create a writeable sandbox from the container 
 ```sh
 module load apptainer/1.2.2
 apptainer build --sandbox foo/ geospatial_latest.sif
@@ -49,6 +49,8 @@ apptainer exec --no-home --writable foo/ R
 install.packages(c("libA","libX","libY"), lib="/usr/local/lib/R/site-library", dependencies=T)
 ```
 and exit with Ctrl-D
+
+FF: install here in one go as many packages as you may ever need!
 
 
 7. Create the .sif-file 
