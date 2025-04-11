@@ -277,13 +277,16 @@ srun apptainer exec geospatial_latest_updated.sif Rscript myproject/myscripts/my
 
 FF: 
 To create, access and edit the file: username@raven01:~> nano oneJob_apptainer.slrm
+
 You can copy the example file from Anne "oneJob_apptainer.slrm", as you built an apptainer and want to submit only one job for now. 
+
 You don't have to change much of it.
 Remember to add the name of the script you want to run into the cluster, which you have already submitted with scp (check right directory).
 Remember to change your email address to receive notifications.
 Remember to change memory limit and time instructions. 
 mem=8000 means 8Gb, you can go up to mem=120000, but try to stay below it.
 time=00:05:00 means 5 minutes, you can go up to time=24:00:00, but try to stay below it because if not needed all this time, your batch job will be higher in priority and faster to execute.
+
 After editing: ctrl O to save the changes, press ENTER to save the name of the file, ctrl X to exit the editing page.
 
 ## Step 7: Submit your job
@@ -299,9 +302,7 @@ The maximum number of jobs a user can run or have queuing simultaneously are 300
 sbatch your_slrm_script.slrm
 ```
 
-FF: this command needs to run into your Raven terminal page,  username@raven01:~> sbatch oneJob_apptainer.slrm
-after which you'll see this message: Submitted batch job 16681835
-You will also receive a mail telling when your job was submitted to the cluster, and how long the time in queue was.
+FF: this command needs to run into your Raven terminal page,  username@raven01:~> sbatch oneJob_apptainer.slrm; after which you'll see this message: Submitted batch job 16681835. You will also receive a mail telling when your job was submitted to the cluster, and how long the time in queue was.
 
 Other useful commands:
 
@@ -314,11 +315,15 @@ sinfo # List the available batch queues (partitions).
 
 FF: squeue is very useful to check the status, but if the Raven terminal stops working or gets stuck here, don't panic, the job is still running in the cluster and it will de-stuck itself.
 
-FF: *Debugging errors*
+## Debugging errors : FF
 If you receive a mail with a failed job, but your not sure about the error (for example, fail code 01), you can check in the Raven terminal:
+
 username@raven01:~> ls ./myproject/messages/
+
 here you will get a list of your jobs and related errors (job.out and job.err), then you need to open the specific case as:
+
 username@raven01:~> cat ./myproject/messages/job.err_16681835
+
 here you will get the panel of the specific job and a clarification of the type of error your job incurred into. Often is a problem of the above settigns in the slrm file: too little memory (srun: error: ravc4029: task 0: Out Of Memory) devoted or not enough time range.
 
 ## Step 8: Transfer your output files
@@ -330,31 +335,51 @@ scp username@raven.mpcdf.mpg.de:/raven/u/username/file_to_copy path_to_target_di
 scp -r username@raven.mpcdf.mpg.de:/raven/u/username/dir_to_copy path_to_target_directory_on_local_machine
 ```
 
-## Using the cluster after the first installation:
+## Using the cluster after the first installation: FF
 
-FF: *To keep in mind*
-Every time you change the cluster R script (in case of errors here), you need to reload it from the local terminal. 
+*To keep in mind*
+
+Every time you change the cluster R script (in case of errors here), you need to reload it from the local terminal.
+
 When changed the slrm file, it is already in Raven so just need to save the changes.
+
 If working in the terminal is too abstract, you can download FileZilla as platform to communicate with the Cluster. 
 
+
 About the R script to load into Raven: remember to
+
 - load the libraries at the beginning of the script
+
 - set the working directories to Raven and not your local machine
+
 - save the results of your analyses as Rdata, pdf, png, csv etc to the raven specified directories
+
 -- the script needs to be completely detatched from your local machine to be able to work well
 
-FF: *Steps to follow each time*
+
+ *Steps to follow each time*
 For Linux.
+
 Local terminal: sudo openfortivpn
+
 Open a new terminal page: ssh username@raven.mpcdf.mpg.de - after adding your password and OTP, this page becomes the connection to raven as: username@raven01
+
 Here you can check what is already in your deposit: username@raven01:~> ls -l
+
 If needed, you can load more files from your local machine: open a new page into your local terminal(not the same one of the vpn), and load new files with scp path_to_file_on_local_machine username@raven.mpcdf.mpg.de:/raven/u/username/ (see above)
+
 If you need to access the slrm file to change it (memory, time, new script): 
 - only to visualize it: username@raven01:~> cat oneJob_apptainer.slrm
+
 - to access and edit the file: username@raven01:~> nano oneJob_apptainer.slrm
+
 - after editing: ctrl O to save the changes, press ENTER to save the name of the file, ctrl X to exit the editing page
+
 After everything is ready, you can open a screen and submit the batch job: username@raven01:~> sbatch oneJob_apptainer.slrm -- Submitted batch job 16681835
+
 If job failed, debug as above: username@raven01:~> ls ./myproject/messages/ -- username@raven01:~> cat ./myproject/messages/job.err_16681835
+
 After correcting the mistake, re-submit the batch job. If you had to change the R code, remember to load it again with scp from your local terminal.
+
 When job completed, download results into local machine from the local terminal: scp username@raven.mpcdf.mpg.de:/raven/u/username/file_to_copy path_to_target_directory_on_local_machine
 
